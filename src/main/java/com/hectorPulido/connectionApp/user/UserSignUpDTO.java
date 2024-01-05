@@ -24,6 +24,9 @@ public class UserSignUpDTO {
     private String password;
 
     @NotBlank(message = "Phone number cannot be blank")
+    @Size(min = 10, message = "Phone number not correct")
     private String phoneNumber;
+
+    @NotBlank(message = "Cannot be blank")
     private String typeOfUser;
 }

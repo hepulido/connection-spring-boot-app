@@ -45,8 +45,8 @@ public class UserController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<String> updateUserProfile(@PathVariable("id") Long userId, @RequestBody UserUpdateDTO userUpdateDTO) {
-        System.out.println("received DTO : " + userUpdateDTO.toString());
+    public ResponseEntity<String> updateUserProfile(@Validated @PathVariable("id") Long userId, @RequestBody UserUpdateDTO userUpdateDTO) {
+//        System.out.println("received DTO : " + userUpdateDTO.toString());
         String existingUserType = userService.getTypeOfUser(userId);
 
         if (userUpdateDTO.getTypeOfUser() == null || userUpdateDTO.getTypeOfUser().isEmpty()) {
