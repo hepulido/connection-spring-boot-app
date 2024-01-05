@@ -30,7 +30,7 @@ public class UserService {
         newUser.setEmail(userSignUpDTO.getEmail());
         newUser.setPassword(userSignUpDTO.getPassword());
         newUser.setPhoneNumber(userSignUpDTO.getPhoneNumber());
-        newUser.setTypeOfUser(userSignUpDTO.getTypeOfUser());
+        newUser.setTypeOfUser(UserType.valueOf(userSignUpDTO.getTypeOfUser()));
         User savedUser = userRepository.save(newUser);
         if (userSignUpDTO.getTypeOfUser().equals("employee")) {
             Employee newEmployee = new Employee();
@@ -74,7 +74,7 @@ public class UserService {
                 user.setPhoneNumber(updateDTO.getPhoneNumber());
             }
             if (updateDTO.getTypeOfUser() != null) {
-                user.setTypeOfUser(updateDTO.getTypeOfUser());
+                user.setTypeOfUser(UserType.valueOf(updateDTO.getTypeOfUser()));
             }
 
             userRepository.save(user);
@@ -138,7 +138,7 @@ public class UserService {
     }
 
 
-    public String getTypeOfUser(Long userId) {
+    public UserType getTypeOfUser(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();

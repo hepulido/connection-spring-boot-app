@@ -33,6 +33,7 @@ public class User {
         private String password;
 
         @Column(name = "type_of_user", nullable = false)
-        private String typeOfUser;
+        @Enumerated (EnumType.STRING)
+        private UserType typeOfUser;
 
 }
