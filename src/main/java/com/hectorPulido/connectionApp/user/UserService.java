@@ -48,8 +48,6 @@ public class UserService {
         Optional <User> userOptional= userRepository.findByEmailAndPassword(
                 signInDTO.getEmail(),
                 signInDTO.getPassword()
-
-
         );
         return userOptional.orElse(null);
     }

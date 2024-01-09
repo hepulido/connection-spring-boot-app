@@ -3,8 +3,10 @@ package com.hectorPulido.connectionApp;
 import com.hectorPulido.connectionApp.user.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class UserControllerTest {
 
     @Mock
@@ -28,8 +31,9 @@ public class UserControllerTest {
     @Test
     public void testSignUpUser_Success() {
         UserSignUpDTO signUpDTO = new UserSignUpDTO();
+        BindingResult result = new BeanPropertyBindingResult(signUpDTO,"userSignUpDTO");
         when(userService.signUp(any(UserSignUpDTO.class))).thenReturn(new User());
-        ResponseEntity<String> response = userController.signUpUser(signUpDTO);
+        ResponseEntity<String> response = userController.signUpUser(signUpDTO, result);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
@@ -46,7 +50,7 @@ public class UserControllerTest {
         BindingResult result = new BeanPropertyBindingResult(signUpDTO,"userSignUpDTO");
         result.addError(new FieldError("userSignUpDTO", "email", "Email cannot be empty"));
         when(userService.signUp(any(UserSignUpDTO.class))).thenReturn(null);
-        ResponseEntity<String> response = userController.signUpUser(signUpDTO);
+        ResponseEntity<String> response = userController.signUpUser(signUpDTO, result );
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Validation failed: [Email cannot be empty]", response.getBody());

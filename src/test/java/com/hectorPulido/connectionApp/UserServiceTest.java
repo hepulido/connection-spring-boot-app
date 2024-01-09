@@ -32,7 +32,8 @@ public class UserServiceTest {
     @Test
     public void testSignUp_Success() {
         UserSignUpDTO signUpDTO = new UserSignUpDTO();
-        when(userRepository.save(any(User.class))).thenReturn(new User());
+        User user = new User();
+        when(userRepository.save(any(User.class))).thenReturn(user);
         User savedUser = userService.signUp(signUpDTO);
 
         assertNotNull(savedUser);

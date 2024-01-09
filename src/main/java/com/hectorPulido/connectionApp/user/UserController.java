@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -25,12 +26,20 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUpUser(@Validated @RequestBody  UserSignUpDTO userSignUpDTO) {
-        User isSignedUp = userService.signUp(userSignUpDTO);
-        if (isSignedUp != null) {
-            return new ResponseEntity<>("User signed up successfully", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>("Failed to sign up user", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> signUpUser(@Validated @RequestBody  UserSignUpDTO userSignUpDTO, BindingResult result) {
+        if(result.hasErrors()){
+            List<String> errorMessages = new ArrayList<>();
+            for(ObjectError error : result.getAllErrors()){
+                errorMessages.add(error.getDefaultMessage());
+            }
+            return new ResponseEntity<>("Validation failed: " + errorMessages, HttpStatus.BAD_REQUEST);
+        }else {
+            User isSignedUp = userService.signUp(userSignUpDTO);
+            if (isSignedUp != null) {
+                return new ResponseEntity<>("User signed up successfully", HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("Failed to sign up user", HttpStatus.BAD_REQUEST);
+            }
         }
     }
 
